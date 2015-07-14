@@ -9,6 +9,10 @@ from mocks import gen_aggregations, gen_data
 
 app = Flask(__name__)
 cors = CORS(app)
+BAD_GLOABAL_VAR = {
+    'new_per_request': 10,
+    'cache': []
+}
 
 
 def esresponse(f):
@@ -37,11 +41,16 @@ def esresponse(f):
 
 @esresponse
 def data(size, data):
-    d = gen_data(size)
+    diff = len(BAD_GLOABAL_VAR['cache']) - size
+    if diff < 0:
+        BAD_GLOABAL_VAR['cache'] = BAD_GLOABAL_VAR['cache'] + gen_data(-diff)
+    else:
+        BAD_GLOABAL_VAR['cache'] = BAD_GLOABAL_VAR['cache'][BAD_GLOABAL_VAR['new_per_request']:] \
+            + gen_data(BAD_GLOABAL_VAR['new_per_request'])
 
     return {
         'hits': {
-            'hits': d,
+            'hits': BAD_GLOABAL_VAR['cache'],
             'max_score': None,
         }
     }

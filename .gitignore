@@ -88,3 +88,9 @@ docs/_build/
 # PyBuilder
 target/
 
+# Install.py trash
+.eggs/
+
+# Virtualenv
+.env/
+
