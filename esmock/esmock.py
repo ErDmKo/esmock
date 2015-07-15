@@ -41,6 +41,7 @@ def esresponse(f):
 
 @esresponse
 def data(size, data):
+    print size
     diff = len(BAD_GLOABAL_VAR['cache']) - size
     if diff < 0:
         BAD_GLOABAL_VAR['cache'] = BAD_GLOABAL_VAR['cache'] + gen_data(-diff)
@@ -50,7 +51,7 @@ def data(size, data):
 
     return {
         'hits': {
-            'hits': BAD_GLOABAL_VAR['cache'],
+            'hits': BAD_GLOABAL_VAR['cache'][:size],
             'max_score': None,
         }
     }
